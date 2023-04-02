@@ -1,0 +1,24 @@
+#/bin/bash -l
+#PBS -l select=1:ncpus=8:mem=16gb:scratch_local=50gb
+#PBS -l walltime=96:00:00
+#PBS -N Ycag_YGS-contig
+
+trap 'clean_scratch' TERM EXIT
+
+cd ${SCRATCHDIR}
+
+cp /path/to/Flye/output/assembly.fasta.gz ${SCRATCHDIR}
+
+cp /path/to/YGS.pl ${SCRATCHDIR}
+
+module add perl-5.20.1-gcc
+
+module add bioperl-1.6.1
+
+gunzip assembly.fasta.gz
+
+perl YGS.pl kmer_size=15 mode=contig contig=assembly.fasta.gz
+
+rm $SCRATCHDIR/assembly.fasta.gz
+
+cp -r ${SCRATCHDIR}/* /path/to/YGS_contig_output/ || CLEAN_SCRATCH=false

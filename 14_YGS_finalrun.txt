@@ -1,0 +1,28 @@
+#/bin/bash -l
+#PBS -l select=1:ncpus=25:mem=128gb:scratch_local=250gb
+#PBS -l walltime=144:00:00
+#PBS -N Ycag_YGS-finalrun
+
+trap 'clean_scratch' TERM EXIT || exit 1
+
+cd ${SCRATCHDIR} || exit 2
+
+cp /path/to/YGS_contig_output/assembly.gen_rep.gz ${SCRATCHDIR}
+cp /path/to/Flye_output/assembly.fasta ${SCRATCHDIR}
+cp /path/to/YGS_trace_output/M1.trace.gz ${SCRATCHDIR}
+cp /path/to/YGS_trace_output/F1.trace.gz ${SCRATCHDIR}
+cp /path/to/YGS.pl ${SCRATCHDIR} || exit 3
+
+module add perl-5.20.1-gcc
+
+module add bioperl-1.6.1 || exit 4
+
+perl YGS.pl kmer_size=15 mode=final_run contig=assembly.fasta trace=M1.trace.gz gen_rep=assembly.gen_rep.gz male_trace=F1.trace.gz
+
+rm ${SCRATCHDIR}/assembly.gen_rep.gz
+rm ${SCRATCHDIR}/assembly.fasta
+rm ${SCRATCHDIR}/M1.trace.gz
+rm ${SCRATCHDIR}/F1.trace.gz
+rm ${SCRATCHDIR}/YGS.pl
+
+cp -r ${SCRATCHDIR}/* /path/to/YGS_finalrun_output || CLEAN_SCRATCH=true

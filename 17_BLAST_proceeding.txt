@@ -1,0 +1,24 @@
+1) Vytvoření FASTA formátu F_ONT na jeden řádek:
+fasta_formatter -i final_Ycag_F_ONT_flye.fasta -o single_line_final_Ycag_F_ONT_flye.fasta
+
+2) Vytvoření FASTA souboru s pomocí identifikátorů:
+grep -w -A1 -Ff file_with_ids_sorted_all_over_75_nogaps single_line_final_Ycag_F_ONT_flye.fasta --no-group-separator > identificators_found_in_ONT_female_genome.fasta
+
+3) BLAST na samčí genom M-ONT:
+module load blast+-2.10.0
+makeblastdb -in /path/to/male-genome-assembly.fasta -dbtype nucl
+blastn -query new_identificators_found_in_ONT_female_genome.fasta -db /path/to/M_ONT.fasta -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovs" -evalue 10e-20 -perc_identity 97 -max_target_seqs 5 > new_blastn_output.csv
+
+4) Filtrování na shodu přes 90 %:
+awk '$13>=90' blastn_output.csv |
+sort -k1 > filt_blastn_output.csv
+
+5) Odstranění identifikátorů, které byly nalezeny i v samčí assambly M_ONT:
+awk '{print $1}' blastn_output.csv > prvni_sloupec_filt_blastn_output.csv
+grep "file_with_ids_sorted_all_over_75_nogaps" -f prvni_sloupec_filt_blastn_output.csv > odstranit_match_BLAST.txt
+
+6) Vytvoření souboru s kandidátními samičími contigy:
+grep --invert-match -f odstranit_match_BLAST.txt
+identificators_found_in_ONT_female_genome.fasta > potentially_W_specific_contigs_found_in_ONT_female_genome.fasta
+#toto je FASTA soubor s contigy (F_ONT), které se po YGS zdály být obohaceny u samic + odebrány contigy, které byly nástrojem BLAST nalezeny i u samce (M_ONT)
+

@@ -1,0 +1,33 @@
+#!/bin/bash
+#PBS -l walltime=168:0:0
+#PBS -l select=1:ncpus=30:mem=1000gb:scratch_local=3000gb
+#PBS -q large_mem@meta-pbs.metacentrum.cz
+#PBS -N Ycag_ONT_flye2
+
+trap 'clean_scratch' TERM EXIT
+
+DATADIR="/path/to/Canu_correction/"
+
+cp $DATADIR/Correct_5000/Ycag_filtered_5000.fastq.correctedReads.fasta.gz $SCRATCHDIR
+
+cp $DATADIR/Correct_10000/Ycag_filtered_10000.fastq.correctedReads.fasta.gz $SCRATCHDIR || exit 1
+
+cd $SCRATCHDIR || exit 2
+
+module add python36-modules-gcc
+
+module add flye-2.8
+
+unpigz -p 29 Ycag_filtered_5000.fastq.correctedReads.fasta.gz
+
+mkdir Assembly_5000;
+
+flye --nano-raw Ycag_filtered_5000.fastq.correctedReads.fasta --out-dir Assembly_5000 --genome-size 750m  --meta -t 29
+
+unpigz -p 29 Ycag_filtered_10000.fastq.correctedReads.fasta.gz
+
+mkdir Assembly_10000;
+
+flye --nano-raw Ycag_filtered_10000.fastq.correctedReads.fasta --out-dir Assembly_10000 --genome-size 750m  --meta -t 29 --min-overlap 5000
+
+cp -r Assembly_* /path/to/Flye2_output/ || export CLEAN_SCRATCH=false

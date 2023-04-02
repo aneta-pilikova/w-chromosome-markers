@@ -1,0 +1,11 @@
+[Workspace loaded from ~/.RData]
+
+> library(ggplot2)
+> options (stringsAsFactors = FALSE)
+# copy from clipboard or <- read.csv(‘final_file’,header ¼ TRUE)
+> data$prumer<-as.numeric(data$prumer)
+
+> ggplot(data=data, aes(prumer)) +
++ geom_histogram(breaks=seq(0,100,by=5),col="red",aes(fill=..count..),alpha = .8) +
++ scale_fill_gradient ("Count", low = "green", high = "red")+
++ labs(x="% sequence unmapped by male", y="number of scaffolds")

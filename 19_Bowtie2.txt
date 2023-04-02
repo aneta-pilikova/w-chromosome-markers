@@ -1,0 +1,20 @@
+#!/bin/bash -l
+#PBS -l select=1:ncpus=16:mem=64gb:scratch_local=50gb
+#PBS -l walltime=48:00:00
+#PBS -N bowtie2_mapping_F_kmers_to_F_ONT
+
+trap 'clean_scratch' TERM EXIT
+
+cd ${SCRATCHDIR}
+
+cp /path/to/single_line_Ycag_F_ONT_flye.fasta ${SCRATCHDIR}
+
+cp /path/to/Ycag_list_of_female_unique_kmers.fasta ${SCRATCHDIR} || exit 2
+
+module load bowtie2-2.2.9
+
+bowtie2-build single_line_Ycag_F_ONT_flye.fasta basename_Ycag_F_ONT_flye || exit 1
+
+/software/bowtie/2.2.9/bin/bowtie2 -f -D 24 -R 3 -N 0 -L 12 -i S,1,0.30 -x basename_Ycag_F_ONT_assembly_flye -U Ycag_list_of_female_unique_kmers.fasta
+
+cp -r ${SCRATCHDIR}*.bam /path/to/bowtie2_output/ || export CLEAN_SCRATCH=false

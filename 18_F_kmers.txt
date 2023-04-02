@@ -1,0 +1,16 @@
+1) Získání k-merů, které jsou pouze v samicích
+
+grep -f M1-kmers F1-kmers --no-group-separator -v > kmers-F1-M1
+(pro všechny soubory)
+
+2) Z nich vytvořen průnik
+
+grep -f kmers-F1-M1 kmers-F1-M2 > intersec-F1-M1_M2
+grep -f intersec-F1-M1_M2 kmers-F1-M3 > intersec-F1-M1_M2_M3
+grep -f kmers-F2-M1 kmers-F2-M2 > intersec-F2-M1_M2
+grep -f intersec-F2-M1_M2 kmers-F2-M3 > intersec-F2-M1_M2_M3
+grep -f intersec-F1-M1_M2_M3 intersec-F2-M1_M2_M3 > list_of_female_unique_kmers
+
+3) Přidáno záhlaví, vytvoření FASTA formátu
+
+awk '{print ">"NR"\n"$1}' list_of_female_unique_kmers > Ycag_list_of_female_unique_kmers.fasta

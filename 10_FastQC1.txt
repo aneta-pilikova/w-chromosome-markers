@@ -1,0 +1,18 @@
+#!/bin/bash
+#PBS -l walltime=6:00:00
+#PBS -l select=1:ncpus=2:mem=64gb:scratch_local=300gb
+#PBS -N Ycag_FastQC
+
+trap 'clean_scratch' TERM EXIT
+
+cd ${SCRATCHDIR} || exit 1
+
+cp /path/to/file_with_Illumina_concat_data_/file.fastq ${SCRATCHDIR} || exit 2
+
+module add fastQC-0.11.5
+
+fastqc file.fastq
+
+rm ${SCRATCHDIR} file.fastq
+
+cp ${SCRATCHDIR}/*.html /path/to/FastQC_output/ || export CLEAN_SCRATCH=false

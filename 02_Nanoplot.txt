@@ -1,0 +1,18 @@
+#!/bin/bash
+#PBS -l walltime=12:00:00
+#PBS -l select=1:ncpus=8:mem=32gb:scratch_local=500gb
+#PBS -N Ycag_nanoplot
+
+trap 'clean_scratch' TERM EXIT
+
+cd $SCRATCHDIR || exit 1
+
+cp /path/to/basecalling-output/Ycag_concat_raw.fastq $SCRATCHDIR/ || exit 2
+
+module add python36-modules-gcc
+
+NanoPlot -t 7 --outdir $SCRATCHDIR/ --prefix  --N50 --format png --fastq $SCRATCHDIR/Ycag_concat_raw.fastq
+
+NanoStat -t 7 --outdir $SCRATCHDIR/ --prefix Ycag_concat_raw --name Ycag_concat_raw_NanoStat.out --fastq $SCRATCHDIR/Ycag_concat_raw.fastq
+
+cp -r ${SCRATCHDIR}/* /path/to/output/folder/ || export CLEAN_SCRATCH=false

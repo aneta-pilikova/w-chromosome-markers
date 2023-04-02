@@ -1,0 +1,20 @@
+#!/bin/bash
+#PBS -l select=1:ncpus=25:mem=256gb:scratch_local=250gb
+#PBS -l walltime=96:00:00
+#PBS -N Ycag_ONT_flye
+
+trap 'clean_scratch' TERM EXIT
+
+cd ${SCRATCHDIR} || exit 1
+
+scp /path/to/basecalling_output/Ycag_ONT_basecalled.fastq ${SCRATCHDIR} || exit 2
+
+module add flye-2.8
+
+flye --nano-raw $SCRATCHDIR/Ycag_ONT_basecalled.fastq --out-dir /path/to/Flye_output/
+
+rm ${SCRATCHDIR}/*.fastq
+
+scp -r ${SCRATCHDIR}/* /path/to/Flye_output/ || export CLEAN_SCRATCH=true
+
+#prolong walltime: qextend <full jobID> 55:00:00

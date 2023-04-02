@@ -1,0 +1,23 @@
+#!/bin/bash
+#PBS -q gpu@meta-pbs.metacentrum.cz
+#PBS -l walltime=24:00:00
+#PBS -l select=1:ncpus=5:ngpus=1:mem=180gb:scratch_ssd=1000gb
+#PBS -l place=exclhost
+#PBS -N Ycag_basecalling
+
+trap 'clean_scratch' TERM EXIT
+
+cd ${SCRATCHDIR} || exit 2
+
+cp -r /path/to/folder/with/Minion_output/fast5/ ${SCRATCHDIR} || exit 1
+
+mkdir basecalled
+
+module add guppy-4.4.1
+
+guppy_basecaller --input_path ./fast5 --save_path ./basecalled --flowcell FLO-MIN111 --kit SQK-LSK110 \
+--compress_fastq -q 0 --qscore_filtering --min_qscore 7 --calib_detect \
+-x "auto" --chunk_size 1000 --num_callers 4 --chunks_per_runner 300 \
+--chunks_per_caller 1000 --gpu_runners_per_device 4
+
+cp -r ${SCRATCHDIR}/basecalled* /path/to/basecalling_output/ || export CLEAN_SCRATCH=false

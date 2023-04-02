@@ -1,0 +1,20 @@
+#!/bin/bash -l
+#PBS -l select=1:ncpus=12:mem=200gb:scratch_local=500gb
+#PBS -l walltime=56:00:00
+#PBS -N Ycag_Jellyfish
+
+trap 'clean_scratch' TERM EXIT
+
+cd ${SCRATCHDIR}
+
+cp /path/to/file_with_Illumina_concat_data_/file.fastq ${SCRATCHDIR}
+
+module add jellyfish-1.1.11
+
+jellyfish count -m 15 -o F1.jelly -c 7 -s 6G -t 11 --both-strands --min-quality=20 file.fastq
+
+/software/jellyfish/1.1.11/bin/jellyfish dump --lower-count=3 F1.jelly* > F1.jelly.fasta
+
+rm $SCRATCHDIR/file.fastq
+
+cp -r ${SCRATCHDIR}/* /path/to/Jellyfish_output/ || CLEAN_SCRATCH=false

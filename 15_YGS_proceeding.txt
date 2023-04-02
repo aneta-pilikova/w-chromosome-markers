@@ -1,0 +1,19 @@
+Z každé tabulky získané z final_run YGS.pl:
+
+1) Výběr řádků se znakem „>“:
+grep ">" ONT_assembly > M1F1
+(pro všechny soubory)
+
+2) Dále spojen první a poslední sloupec:
+awk '{print $1, $NF}' M1F1 > last_M1F1
+(pro všechny soubory)
+
+3) Poté spojení všech tabulek:
+join last_M1F1 last_M1F2 > joined_M1
+join joined_M1 last_M2F1 > joined_M1_last_M2F1
+join joined_M1_last_M2F1 last_M2F2 > joined_M2
+join joined_M2 last_M3F1 > joined_M2_last_M3F1
+join joined_M2_last_M3F1 last_M3F2 > joined_all
+
+4) Nahradit mezery tabulátory: 
+awk -v OFS="\t" '$1=$1' joined_all > final_TAB
