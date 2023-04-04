@@ -1,11 +1,13 @@
-[Workspace loaded from ~/.RData]
+library (tidyverse)
+library(readxl)
+library(viridis)
+setwd("path/to/folder/with/final_TAB")
+final_TAB <- read_xlsx("final_TAB")
+final_TAB <- final_TAB %>% filter(!is.na(prumer))
 
-> library(ggplot2)
-> options (stringsAsFactors = FALSE)
-# copy from clipboard or <- read.csv(‘final_file’,header = TRUE)
-> data$prumer<-as.numeric(data$prumer)
-
-> ggplot(data=data, aes(prumer)) +
-+ geom_histogram(breaks=seq(0,100,by=5),col="red",aes(fill=..count..),alpha = .8) +
-+ scale_fill_gradient ("Count", low = "green", high = "red")+
-+ labs(x="% sequence unmapped by male", y="number of scaffolds")
+ggplot(final_TAB) + geom_histogram(aes(x=prumer, fill = ..count..), color="black", binwidth = 2) + 
+  xlab("% fragmentů bez shody se samčími sekvencemi") + ylab ("počet fragmentů samičího genomu") +
+  guides(fill=guide_legend(title="počet", reverse = TRUE)) + theme_bw (12) + 
+  theme(axis.text = element_text(colour = "black")) +
+  scale_fill_viridis(option = "cividis", begin = 1, end = 0) +
+  geom_vline(xintercept=75,linetype = 3)
