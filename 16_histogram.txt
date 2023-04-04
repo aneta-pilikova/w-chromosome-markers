@@ -2,7 +2,7 @@
 
 > library(ggplot2)
 > options (stringsAsFactors = FALSE)
-# copy from clipboard or <- read.csv(‘final_file’,header ¼ TRUE)
+# copy from clipboard or <- read.csv(‘final_file’,header = TRUE)
 > data$prumer<-as.numeric(data$prumer)
 
 > ggplot(data=data, aes(prumer)) +
