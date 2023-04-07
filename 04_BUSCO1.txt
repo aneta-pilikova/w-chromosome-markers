@@ -21,4 +21,4 @@ busco -c 1 -i Ycag-ONT.fasta -o Ycag-ONT.endopterygota_busco.out -l endopterygot
 
 rm ${SCRATCHDIR}/*fasta*
 
-cp -r ${SCRATCHDIR}/*busco.out /path/to/BUSCO_output/|| export CLEAN_SCRATCH=false
+cp ${SCRATCHDIR}/*busco.out /path/to/BUSCO_output/|| export CLEAN_SCRATCH=false
