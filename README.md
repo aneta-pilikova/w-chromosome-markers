@@ -1,4 +1,5 @@
 **Vývoj molekulárních markerů pro určení pohlaví u předivky brslenové (_Yponomeuta cagnagella_)**
+
 [Development of molecular markers for sex determination of the spindle ermine moth (_Yponomeuta cagnagella_), in Czech]
 
 Předkládaná diplomová práce má za cíl identifikovat sekvence z pohlavního chromozomu W pomocí k-merové analýzy genomových sekvenačních dat obou pohlaví.
