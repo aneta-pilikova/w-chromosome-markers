@@ -1,8 +1,5 @@
 **Vývoj molekulárních markerů pro určení pohlaví u předivky brslenové (_Yponomeuta cagnagella_)**
-
-diplomová práce, Mgr. Aneta Pilíková, 2023
-
-[Development of molecular markers for sex determination of the spindle ermine moth (_Yponomeuta cagnagella_). Mgr. Thesis, in Czech]
+[Development of molecular markers for sex determination of the spindle ermine moth (_Yponomeuta cagnagella_), in Czech]
 
 Předkládaná diplomová práce má za cíl identifikovat sekvence z pohlavního chromozomu W pomocí k-merové analýzy genomových sekvenačních dat obou pohlaví.
 Sekvenací genomové DNA na platformě Oxford Nanopore Technology byla získána data ve formátu FAST5. Ta byla zpracována pomocí skriptu „02_Basecalling“ a kvalita ověřených dat byla ověřena postupem uvedeným ve skriptu „02_Nanoplot.sh“. Skládání genomu (assembly) bylo provedeno podle skriptu „03_Flye“. Kvalita byla ohodnocena pomocí skriptů „04_BUSCO1“ a „05_Quast“.
