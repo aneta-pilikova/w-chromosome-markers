@@ -1,0 +1,8 @@
+Domain based ANnotation of Transposable Elements - DANTE
+(Galaxy Version 1.1.0)
+
+1) Vybrat typ dat = Fasta
+2) Využití databáze taxon and protein domain database version (REXdb) = Metazoa_version_3.1
+3) Scoring matrix = default (BLOSUM80)
+4) Nastavení dvou běhů = Run iterative search -> Yes
+   Second iteration run search against database of proteins extracted from query. Second iteration can yield some extra hits in some cases.
