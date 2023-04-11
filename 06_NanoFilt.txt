@@ -21,4 +21,4 @@ NanoFilt -l 10000 file_basecalled.fastq > file_filtered_10000.fastq
 
 NanoPlot -t 7 --outdir file_filtered_10000_NanoPlot --N50 --format png --fastq $SCRATCHDIR/file_filtered_10000.fastq
 
-cp -r ${SCRATCHDIR}/file_f* /path/to/NanoFilt_output/ || export CLEAN_SCRATCH=false
+cp ${SCRATCHDIR}/file_f* /path/to/NanoFilt_output/ || export CLEAN_SCRATCH=false
